@@ -1,0 +1,41 @@
+<div class="container">
+    <app-user-title [columns]="columns"></app-user-title>
+</div>
+
+<div class="contain">
+  @for (user of usersActive; track user.email){
+<!--<app-user-detail name="{{user.name}}" lastName="{{user.lastName}}" email="{{user.email}}"></app-user-detail>-->  
+    <app-user-detail [name]="user.name" [lastName]="user.lastname" [email]="user.email"></app-user-detail>
+}
+</div>
+
+<!-- <table>
+  <tr>
+    <td>{{ titleName }}</td>
+    <td>{{ titleLastName }}</td>
+    <td>{{ titleEmail }}</td>
+  </tr>
+  @for (user of usersActive; track user.email) {
+    <tr>
+      <td>{{ user.name }}</td>
+      <td>{{ user.lastName }}</td>
+      <td>{{ user.email }}</td>
+    </tr>
+  }
+ -->
+<!--   <tr *ngFor="let user of usersActive">
+    <td>{{ user.name }}</td>
+    <td>{{ user.lastName }}</td>
+    <td>{{ user.email }}</td>
+  </tr> -->
+<!--   <tr>
+    <td>Jane</td>
+    <td>Smith</td>
+    <td>jane.smith@example.com</td>
+  </tr>
+  <tr>
+    <td>Bob</td>
+    <td>Johnson</td>
+    <td>bob.example@gmail.com</td>
+  </tr> -->
+<!-- </table> -->

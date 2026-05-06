@@ -1,0 +1,22 @@
+.info {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.value {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 33%;
+}
+
+.info:nth-child(2n) {
+  background-color: #f0f0f0;
+}
+
+.info:hover {
+  background-color: #e9f3a4;
+  cursor: pointer;
+}

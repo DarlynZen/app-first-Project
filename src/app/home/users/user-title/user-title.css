@@ -1,0 +1,15 @@
+ul {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  box-sizing: border-box;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+  display: inline-block;
+  width: 33%;
+}
