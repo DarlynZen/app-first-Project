@@ -15,16 +15,19 @@ export class UserList {
       name: 'Alice',
       lastname: 'Smith',
       email: 'alice@correo.com',
+      age: 30,
     },
     {
       name: 'Bob',
       lastname: 'Johnson',
       email: 'bob@correo.com',
+      age: 25,
     },
     {
       name: 'Charlie',
       lastname: 'Brown',
       email: 'charlie@correo.com',
+      age: 35,
     },
   ]
   
@@ -35,6 +38,7 @@ export class UserList {
     {property: "name", label: "Nombre de usuario"},
     {property: "lastName", label: "Apellido de usuario"},
     {property: "email", label: "Correo electrónico"},
+    {property: "age", label:"Edad (años)"},
   ]
   
   //el valor de columns se obtiene a partir de las claves del primer objeto del array usersActive

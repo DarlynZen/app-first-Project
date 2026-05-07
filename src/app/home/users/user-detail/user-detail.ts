@@ -11,4 +11,5 @@ export class UserDetail {
   @Input() name!: string;
   @Input() lastName!: string;
   @Input() email!: string;
+  @Input() age!: number;
 }
