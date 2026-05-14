@@ -1,6 +1,11 @@
-.contain {
+.container {
   display: flex;
   flex-direction: column;
+}
+
+:host {
+  display: block;
+  width: 70%;
 }
 
 /* table {

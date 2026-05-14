@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { IColumn } from '../interfaces/column';
 
 @Component({
   selector: 'app-user-title',
@@ -12,7 +13,7 @@ export class UserTitle {
   titleLastName = 'Apellido'.toUpperCase();
   titleEmail = 'Correo electrónico'.toUpperCase(); */
 
-  //arrego basico, no abusar del any, se coloca cuando no se sabe el tipo de dato que se va a recibir
-  @Input() columns: any[] = [];
-
+  //arreglo basico, no abusar del any, se coloca cuando no se sabe el tipo de dato que se va a recibir
+  //@Input() columns: any[] = [];
+  @Input() columns: IColumn[] = [];
 }

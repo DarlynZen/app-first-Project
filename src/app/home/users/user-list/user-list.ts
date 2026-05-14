@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UserTitle } from "../user-title/user-title";
 import { UserDetail } from "../user-detail/user-detail";
+import { IColumn } from '../interfaces/column';
 
 @Component({
   selector: 'app-user-list',
@@ -34,7 +35,9 @@ export class UserList {
 /*   columns = ['name', 'lastName', 'email'];
  */
   //estructura de columnas
-  columns = [
+  //uso de arreglo IColumn para definir las columnas de la tabla, cada objeto del arreglo representa una columna con su propiedad y etiqueta correspondiente
+  columns : IColumn[] = [
+    //objetos de tipo json
     {property: "name", label: "Nombre de usuario"},
     {property: "lastName", label: "Apellido de usuario"},
     {property: "email", label: "Correo electrónico"},
