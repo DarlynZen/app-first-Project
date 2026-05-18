@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UserTitle } from "../user-title/user-title";
 import { UserDetail } from "../user-detail/user-detail";
 import { IColumn } from '../interfaces/column';
+import { IUser } from '../interfaces/user';
 
 @Component({
   selector: 'app-user-list',
@@ -10,37 +11,18 @@ import { IColumn } from '../interfaces/column';
   styleUrl: './user-list.css',
 })
 export class UserList {
-  //lista array
-  usersActive = [
-    {
-      name: 'Alice',
-      lastname: 'Smith',
-      email: 'alice@correo.com',
-      age: 30,
-    },
-    {
-      name: 'Bob',
-      lastname: 'Johnson',
-      email: 'bob@correo.com',
-      age: 25,
-    },
-    {
-      name: 'Charlie',
-      lastname: 'Brown',
-      email: 'charlie@correo.com',
-      age: 35,
-    },
-  ]
-  
+  //users dentro de input es un alias, para no cambiar otros nombres
+  @Input("users") usersActive: IUser[] = [];
+
 /*   columns = ['name', 'lastName', 'email'];
  */
   //estructura de columnas
   //uso de arreglo IColumn para definir las columnas de la tabla, cada objeto del arreglo representa una columna con su propiedad y etiqueta correspondiente
   columns : IColumn[] = [
     //objetos de tipo json
-    {property: "name", label: "Nombre de usuario"},
-    {property: "lastName", label: "Apellido de usuario"},
-    {property: "email", label: "Correo electrónico"},
+    {property: "name", label: "Nombre"},
+    {property: "lastName", label: "Apellido"},
+    {property: "email", label: "Correo"},
     {property: "age", label:"Edad (años)"},
   ]
   
