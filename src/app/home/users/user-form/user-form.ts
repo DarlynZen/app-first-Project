@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-import { IUser } from '../interfaces/user';
+import { IUser, IGender } from '../interfaces/user';
 
 @Component({
   selector: 'app-user-form',
@@ -14,11 +14,13 @@ export class UserForm {
   @ViewChild("lastNameInput") InputLastname!: ElementRef<HTMLInputElement>;
   @ViewChild("emailInput") InputEmail!: ElementRef<HTMLInputElement>;
   @ViewChild("ageInput") InputAge!: ElementRef<HTMLInputElement>;
+  @ViewChild("genderInput") InputGender!: ElementRef<HTMLInputElement>;
 
   name = "";
   lastname = "";
   email = "";
   age = 0;
+  gender = "";
 
   constructor() {
     //metodo constructor es el primer metodo en ejecutarse cuando se crea una instancia de la clase, es decir, cuando se crea un nuevo objeto de tipo UserForm. Es común usar el constructor para inicializar propiedades o configurar el estado inicial del componente.
@@ -48,8 +50,12 @@ export class UserForm {
     this.age = Number((evt.target as HTMLInputElement).value);
   }
 
+  onInputGender(target: EventTarget){
+    this.gender = (target as HTMLSelectElement).value as IGender;
+  }
+
   onSubmit() {
-    if(!this.name || !this.lastname || !this.email || !this.age) {
+    if(!this.name || !this.lastname || !this.email || !this.age || !this.gender) {
       alert("Por favor, complete todos los campos.");
       return;
     }
@@ -59,8 +65,13 @@ export class UserForm {
       return;
     }
 
-    console.log("submit",{name:this.name,lastname:this.lastname,email:this.email,age:this.age});
-    this.onCreate.emit({name:this.name,lastname:this.lastname,email:this.email,age:this.age});
+    this.onCreate.emit({
+      name:this.name,
+      lastname:this.lastname,
+      email:this.email,
+      age:this.age,
+      gender:this.gender as IGender});
+
     this.reset();
   }
 
@@ -69,14 +80,13 @@ export class UserForm {
     this.lastname = "";
     this.email = "";
     this.age = 0;
-
+    this.gender = "";
     this.InputName.nativeElement.value = "";
     this.InputLastname.nativeElement.value = "";
     this.InputEmail.nativeElement.value = "";
     this.InputAge.nativeElement.value = "";
+    this.InputGender.nativeElement.value = "";
   }
-  
-
   
 
   //metodo ngAfterViewInit es un método del ciclo de vida de Angular que se ejecuta después de que la vista del componente ha sido completamente inicializada. Es un buen lugar para realizar tareas que requieren acceso a elementos del DOM, como agregar event listeners a elementos específicos.

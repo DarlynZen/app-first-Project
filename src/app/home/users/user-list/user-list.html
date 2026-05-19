@@ -5,11 +5,14 @@
 <div class="contain">
   @for (user of usersActive; track user.email){
 <!--<app-user-detail name="{{user.name}}" lastName="{{user.lastName}}" email="{{user.email}}"></app-user-detail>-->  
-    <app-user-detail [name]="user.name" [lastName]="user.lastname" [email]="user.email" [age]="user.age" (onEdit)="handleEdit(user)" (onDelete)="handleDelete(user)"></app-user-detail>
+    <app-user-detail [user]="user"></app-user-detail>
 }
+<!-- (onEdit)="handleEdit(user)" (onDelete)="handleDelete(user)" -->
+
+
 </div>
 
-//intentar poner en onDelete y el onEdit usando javascript y que funcione
+<!-- intentar poner en onDelete y el onEdit usando javascript y que funcione -->
 
 <!-- <table>
   <tr>

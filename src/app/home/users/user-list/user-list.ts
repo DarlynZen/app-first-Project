@@ -24,6 +24,8 @@ export class UserList {
     {property: "lastName", label: "Apellido"},
     {property: "email", label: "Correo"},
     {property: "age", label:"Edad (años)"},
+    {property: "gender", label: "Género"},
+    //{property: "actions", label: "Acciones"}
   ]
   
   //el valor de columns se obtiene a partir de las claves del primer objeto del array usersActive

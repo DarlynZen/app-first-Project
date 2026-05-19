@@ -21,7 +21,7 @@ form{
     margin-bottom: 5px;
   }
 
-  input{
+  input, select{
     box-sizing: border-box;
     padding: 10px;
     border: 1px solid #ccc;
