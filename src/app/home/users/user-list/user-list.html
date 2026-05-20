@@ -3,10 +3,10 @@
 </div>
 
 <div class="contain">
-  @for (user of usersActive; track user.email){
+  @for (user of usersActive; track user.email; let index = $index){
 <!--<app-user-detail name="{{user.name}}" lastName="{{user.lastName}}" email="{{user.email}}"></app-user-detail>-->  
-    <app-user-detail [user]="user"></app-user-detail>
-}
+    <app-user-detail [user]="user" [index]="index" (onDelete)="delete($event)" (onEdit)="edit($event)"></app-user-detail>
+  }
 <!-- (onEdit)="handleEdit(user)" (onDelete)="handleDelete(user)" -->
 
 

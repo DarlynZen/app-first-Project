@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { IUser, IGender } from '../interfaces/user';
 
 @Component({
@@ -10,6 +10,7 @@ import { IUser, IGender } from '../interfaces/user';
 export class UserForm {
 
   @Output() onCreate: EventEmitter<IUser> = new EventEmitter();
+  @Input() editUser: IUser | null = null;
   @ViewChild("nameInput") InputName!: ElementRef<HTMLInputElement>;
   @ViewChild("lastNameInput") InputLastname!: ElementRef<HTMLInputElement>;
   @ViewChild("emailInput") InputEmail!: ElementRef<HTMLInputElement>;
@@ -21,6 +22,7 @@ export class UserForm {
   email = "";
   age = 0;
   gender = "";
+  isEditMode = false;
 
   constructor() {
     //metodo constructor es el primer metodo en ejecutarse cuando se crea una instancia de la clase, es decir, cuando se crea un nuevo objeto de tipo UserForm. Es común usar el constructor para inicializar propiedades o configurar el estado inicial del componente.
@@ -32,6 +34,24 @@ export class UserForm {
     input.addEventListener('input', function(event) {
     console.log((event.target as HTMLInputElement).value);
   }); */
+  }
+
+  ngOnChanges(){
+    //si editUser es diferente de nulo
+    if(this.editUser) {
+      this.name = this.editUser.name;
+      this.lastname = this.editUser.lastname;
+      this.email = this.editUser.email;
+      this.age = this.editUser.age
+      this.gender = this.editUser.gender;
+      this.isEditMode = true;
+
+      this.InputName.nativeElement.value = this.name;
+      this.InputLastname.nativeElement.value = this.lastname;
+      this.InputEmail.nativeElement.value = this.email;
+      this.InputAge.nativeElement.value = this.age.toString();
+      this.InputGender.nativeElement.value = this.gender;
+    }
   }
 
   onInputName(evt: Event) {
@@ -80,12 +100,14 @@ export class UserForm {
     this.lastname = "";
     this.email = "";
     this.age = 0;
-    this.gender = "";
+    this.gender = "Masculino";
+    this.isEditMode = false;
+
     this.InputName.nativeElement.value = "";
     this.InputLastname.nativeElement.value = "";
     this.InputEmail.nativeElement.value = "";
     this.InputAge.nativeElement.value = "";
-    this.InputGender.nativeElement.value = "";
+    this.InputGender.nativeElement.value = "Masculino";
   }
   
 

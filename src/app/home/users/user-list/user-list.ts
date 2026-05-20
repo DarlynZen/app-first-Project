@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { UserTitle } from "../user-title/user-title";
 import { UserDetail } from "../user-detail/user-detail";
 import { IColumn } from '../interfaces/column';
@@ -13,7 +13,8 @@ import { IUser } from '../interfaces/user';
 export class UserList {
   //users dentro de input es un alias, para no cambiar otros nombres
   @Input("users") usersActive: IUser[] = [];
-
+  @Output() onDelete: EventEmitter<number> = new EventEmitter();
+  @Output() onEdit: EventEmitter<IUser> = new EventEmitter();
 /*   columns = ['name', 'lastName', 'email'];
  */
   //estructura de columnas
@@ -25,8 +26,16 @@ export class UserList {
     {property: "email", label: "Correo"},
     {property: "age", label:"Edad (años)"},
     {property: "gender", label: "Género"},
-    //{property: "actions", label: "Acciones"}
+    {property: "actions", label: "Acciones"}
   ]
+
+  delete(index: number) {
+    this.onDelete.emit(index);
+  }
+
+  edit(user: IUser) {
+    this.onEdit.emit(user);
+  }
   
   //el valor de columns se obtiene a partir de las claves del primer objeto del array usersActive
 /*   columns = Object.keys(this.usersActive[0]);
