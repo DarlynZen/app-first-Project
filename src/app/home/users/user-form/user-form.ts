@@ -21,10 +21,12 @@ export class UserForm {
   lastname = "";
   email = "";
   age = 0;
-  gender = "";
+  gender = "Masculino";
   isEditMode = false;
-  //inicialmente sera nulo
-  id: number | null = null;
+  //inicialmente sera indefinido, con ningun valor ni siquiera el nulo
+  id: number | undefined;
+  
+  title = "Create";
 
   constructor() {
     //metodo constructor es el primer metodo en ejecutarse cuando se crea una instancia de la clase, es decir, cuando se crea un nuevo objeto de tipo UserForm. Es común usar el constructor para inicializar propiedades o configurar el estado inicial del componente.
@@ -39,7 +41,7 @@ export class UserForm {
   }
 
   ngOnChanges(){
-    //si editUser es diferente de nulo
+    //si editUser es diferente de indefinido
     if(this.editUser) {
       this.name = this.editUser.name;
       this.lastname = this.editUser.lastname;
@@ -48,6 +50,8 @@ export class UserForm {
       this.gender = this.editUser.gender;
       this.isEditMode = true;
       this.id = this.editUser.id;
+
+      this.title = "Edit";
 
       this.InputName.nativeElement.value = this.name;
       this.InputLastname.nativeElement.value = this.lastname;
@@ -83,6 +87,21 @@ export class UserForm {
       return;
     }
 
+    if(this.name.trim().length < 3){
+      alert("El nombre debe tener al menos 3 caracteres.");
+      return;
+    }
+
+    if(this.lastname.trim().length < 3){
+      alert("El apellido debe tener al menos 3 caracteres.");
+      return;
+    }
+
+    if(!this.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      alert("El correo debe tener un formato válido.");
+      return;
+    }
+
     if(this.age <= 0) {
       alert("Por favor, ingrese una edad válida.");
       return;
@@ -95,7 +114,7 @@ export class UserForm {
       email:this.email,
       age:this.age,
       gender:this.gender as IGender,
-      id: this.id ?? Date.now(), //si id es nulo, se asigna un valor único basado en la fecha actual, de lo contrario se asigna el valor de id existente (en caso de edición)
+      id: this.id, //si id es nulo, se asigna un valor único basado en la fecha actual, de lo contrario se asigna el valor de id existente (en caso de edición)
     });
 
     this.reset();
@@ -108,7 +127,9 @@ export class UserForm {
     this.age = 0;
     this.gender = "Masculino";
     this.isEditMode = false;
-    this.id = null;
+    //el undefined no se asigna, pero es una excepcion en este caso para indicar que no hay un id asignado, ya que el id se maneja internamente en el componente Home y no debe ser modificado por el componente UserForm, por lo tanto se asigna undefined para indicar que no hay un id asignado, en lugar de null o un valor numérico específico.
+    this.id = undefined;
+    this.title = "Create";
 
     this.InputName.nativeElement.value = "";
     this.InputLastname.nativeElement.value = "";
