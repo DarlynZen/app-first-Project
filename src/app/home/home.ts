@@ -17,8 +17,9 @@ export class Home {
     { name: 'Charlie', lastname: 'Brown', email: 'charlie@correo.com', age: 35, gender: "Masculino"},
   ]
 
-  //inicialmente va a ser u nuclo porque no hay ningun usuario seleccionado para editar, pero cuando se seleccione un usuario para editar, se va a asignar ese usuario a esta variable
-  userSelected: IUser | null = null;
+  //inicialmente va a ser un nulo porque no hay ningun usuario seleccionado para editar, pero cuando se seleccione un usuario para editar, se va a asignar ese usuario a esta variable
+  //el userSelected será de tipoIUser y ademas tendrá la propiedad de id
+  userSelected: IUser & {id: number} | null = null;
 
   delete(index: number) {
     const existsinUser = this.usersActive[index];
@@ -36,6 +37,13 @@ export class Home {
 
   edit(user: IUser) {
     console.log("Usuario a editar:", user);
-    this.userSelected = user;
+    this.userSelected = 
+    {...user, 
+     id: this.usersActive.includes(user) ? this.usersActive.indexOf(user) : -1, //si el usuario existe en la lista, se asigna su índice como id, de lo contrario se asigna -1 para indicar que no es un usuario existente
+    }
   }
+
+
+
+  
 }

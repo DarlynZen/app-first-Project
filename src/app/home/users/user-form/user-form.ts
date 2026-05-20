@@ -8,9 +8,9 @@ import { IUser, IGender } from '../interfaces/user';
   styleUrl: './user-form.css',
 })
 export class UserForm {
-
-  @Output() onCreate: EventEmitter<IUser> = new EventEmitter();
-  @Input() editUser: IUser | null = null;
+  //El uso de Partial significa que el campo podria o no obtener el id como number, como opcional en el caso de que se este creando un nuevo usuario, no se tendria un id asignado, pero en el caso de que se este editando un usuario existente, si se tendria un id asignado. Esto permite que el componente UserForm sea reutilizable tanto para la creación como para la edición de usuarios, ya que puede manejar ambos casos sin requerir cambios en su lógica interna.
+  @Output() onCreate: EventEmitter<IUser & Partial<{ id: number }>> = new EventEmitter();
+  @Input() editUser: IUser & {id: number} | null = null;
   @ViewChild("nameInput") InputName!: ElementRef<HTMLInputElement>;
   @ViewChild("lastNameInput") InputLastname!: ElementRef<HTMLInputElement>;
   @ViewChild("emailInput") InputEmail!: ElementRef<HTMLInputElement>;
@@ -23,6 +23,8 @@ export class UserForm {
   age = 0;
   gender = "";
   isEditMode = false;
+  //inicialmente sera nulo
+  id: number | null = null;
 
   constructor() {
     //metodo constructor es el primer metodo en ejecutarse cuando se crea una instancia de la clase, es decir, cuando se crea un nuevo objeto de tipo UserForm. Es común usar el constructor para inicializar propiedades o configurar el estado inicial del componente.
@@ -45,6 +47,7 @@ export class UserForm {
       this.age = this.editUser.age
       this.gender = this.editUser.gender;
       this.isEditMode = true;
+      this.id = this.editUser.id;
 
       this.InputName.nativeElement.value = this.name;
       this.InputLastname.nativeElement.value = this.lastname;
@@ -85,12 +88,15 @@ export class UserForm {
       return;
     }
 
+    //
     this.onCreate.emit({
       name:this.name,
       lastname:this.lastname,
       email:this.email,
       age:this.age,
-      gender:this.gender as IGender});
+      gender:this.gender as IGender,
+      id: this.id ?? Date.now(), //si id es nulo, se asigna un valor único basado en la fecha actual, de lo contrario se asigna el valor de id existente (en caso de edición)
+    });
 
     this.reset();
   }
@@ -102,6 +108,7 @@ export class UserForm {
     this.age = 0;
     this.gender = "Masculino";
     this.isEditMode = false;
+    this.id = null;
 
     this.InputName.nativeElement.value = "";
     this.InputLastname.nativeElement.value = "";
