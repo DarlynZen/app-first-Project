@@ -1,9 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { IUser, IGender } from '../interfaces/user';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-user-form',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
@@ -11,11 +12,9 @@ export class UserForm {
   //El uso de Partial significa que el campo podria o no obtener el id como number, como opcional en el caso de que se este creando un nuevo usuario, no se tendria un id asignado, pero en el caso de que se este editando un usuario existente, si se tendria un id asignado. Esto permite que el componente UserForm sea reutilizable tanto para la creación como para la edición de usuarios, ya que puede manejar ambos casos sin requerir cambios en su lógica interna.
   @Output() onCreate: EventEmitter<IUser & Partial<{ id: number }>> = new EventEmitter();
   @Input() editUser: IUser & {id: number} | null = null;
-  @ViewChild("nameInput") InputName!: ElementRef<HTMLInputElement>;
-  @ViewChild("lastNameInput") InputLastname!: ElementRef<HTMLInputElement>;
-  @ViewChild("emailInput") InputEmail!: ElementRef<HTMLInputElement>;
-  @ViewChild("ageInput") InputAge!: ElementRef<HTMLInputElement>;
-  @ViewChild("genderInput") InputGender!: ElementRef<HTMLInputElement>;
+
+  //Ubicar NgForm
+  @ViewChild('userForm') userForm!: NgForm;
 
   name = "";
   lastname = "";
@@ -23,21 +22,11 @@ export class UserForm {
   age = 0;
   gender = "Masculino";
   isEditMode = false;
-  //inicialmente sera indefinido, con ningun valor ni siquiera el nulo
   id: number | undefined;
   
   title = "Create";
 
   constructor() {
-    //metodo constructor es el primer metodo en ejecutarse cuando se crea una instancia de la clase, es decir, cuando se crea un nuevo objeto de tipo UserForm. Es común usar el constructor para inicializar propiedades o configurar el estado inicial del componente.
-    //para saber quién es el usuario que está escribiendo en el input
-    /* const input = document!.getElementById('name')!
-    
-    console.log("input",input);
-    
-    input.addEventListener('input', function(event) {
-    console.log((event.target as HTMLInputElement).value);
-  }); */
   }
 
   ngOnChanges(){
@@ -50,35 +39,16 @@ export class UserForm {
       this.gender = this.editUser.gender;
       this.isEditMode = true;
       this.id = this.editUser.id;
-
       this.title = "Edit";
 
-      this.InputName.nativeElement.value = this.name;
-      this.InputLastname.nativeElement.value = this.lastname;
-      this.InputEmail.nativeElement.value = this.email;
-      this.InputAge.nativeElement.value = this.age.toString();
-      this.InputGender.nativeElement.value = this.gender;
+      this.userForm.setValue({
+        name: this.name,
+        lastname: this.lastname,
+        email: this.email,
+        age: this.age,
+        gender: this.gender
+      });
     }
-  }
-
-  onInputName(evt: Event) {
-    this.name = (evt.target as HTMLInputElement).value;
-  }
-
-  onInputLastname(evt: Event) {
-    this.lastname = (evt.target as HTMLInputElement).value;
-  }
-
-  onInputEmail(evt: Event) {
-    this.email = (evt.target as HTMLInputElement).value;
-  }
-
-  onInputAge(evt: Event) {
-    this.age = Number((evt.target as HTMLInputElement).value);
-  }
-
-  onInputGender(target: EventTarget){
-    this.gender = (target as HTMLSelectElement).value as IGender;
   }
 
   onSubmit() {
@@ -87,20 +57,9 @@ export class UserForm {
       return;
     }
 
-    if(this.name.trim().length < 3){
-      alert("El nombre debe tener al menos 3 caracteres.");
-      return;
-    }
-
-    if(this.lastname.trim().length < 3){
-      alert("El apellido debe tener al menos 3 caracteres.");
-      return;
-    }
-
-    if(!this.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      alert("El correo debe tener un formato válido.");
-      return;
-    }
+    this.validationLength(this.name, 3, "Nombre")
+    this.validationLength(this.lastname, 3, "Apellido")
+    this.validationEmail(this.email);
 
     if(this.age <= 0) {
       alert("Por favor, ingrese una edad válida.");
@@ -130,24 +89,31 @@ export class UserForm {
     //el undefined no se asigna, pero es una excepcion en este caso para indicar que no hay un id asignado, ya que el id se maneja internamente en el componente Home y no debe ser modificado por el componente UserForm, por lo tanto se asigna undefined para indicar que no hay un id asignado, en lugar de null o un valor numérico específico.
     this.id = undefined;
     this.title = "Create";
-
-    this.InputName.nativeElement.value = "";
-    this.InputLastname.nativeElement.value = "";
-    this.InputEmail.nativeElement.value = "";
-    this.InputAge.nativeElement.value = "";
-    this.InputGender.nativeElement.value = "Masculino";
   }
-  
 
-  //metodo ngAfterViewInit es un método del ciclo de vida de Angular que se ejecuta después de que la vista del componente ha sido completamente inicializada. Es un buen lugar para realizar tareas que requieren acceso a elementos del DOM, como agregar event listeners a elementos específicos.
-  /*   ngAfterViewInit() {
-      const input = document!.getElementById('name')! as HTMLInputElement;
-  
-      console.log("input", input);
-  
-      input.addEventListener('input', function (evt) {
-        this.value = (evt.target as HTMLInputElement).value;
-      });
-    } */
+  changeUpperCase(value: string): string {
+    return value.toUpperCase();
+  }
+
+  private validationLength(value: string, minLength: number, fieldName: string) {
+    if(value.trim().length < minLength) {
+      alert(`${fieldName} debe tener al menos ${minLength} caracteres.`);
+      //excepcion de validacion con mensajes por consola
+      throw "Validation error";
+    }
+  }
+  private validationEmail(value: string) {
+    if(!value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      alert("El correo debe tener un formato válido.");
+      throw "Validation error";
+    }
+  }
+
+  private validationAge(value: number, max: number | null = null, min: number | null, fieldName: string = "Edad") {
+    if(value <= 0) {
+      alert("Por favor, ingrese una edad válida.");
+      throw "Validation error";
+    }
+  }
 }
 
