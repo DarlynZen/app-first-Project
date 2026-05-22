@@ -52,21 +52,17 @@ export class UserForm {
   }
 
   onSubmit() {
-    if(!this.name || !this.lastname || !this.email || !this.age || !this.gender) {
-      alert("Por favor, complete todos los campos.");
-      return;
-    }
+    this.validationRequired(this.name, "Nombre");
+    this.validationRequired(this.lastname, "Apellido");
+    this.validationRequired(this.email, "Correo");
+    this.validationRequired(this.age.toString(), "Edad");
+    this.validationRequired(this.gender, "Genero");
 
     this.validationLength(this.name, 3, "Nombre")
     this.validationLength(this.lastname, 3, "Apellido")
     this.validationEmail(this.email);
+    this.validationRangeNumber(this.age, 120, 0, "Edad");
 
-    if(this.age <= 0) {
-      alert("Por favor, ingrese una edad válida.");
-      return;
-    }
-
-    //
     this.onCreate.emit({
       name:this.name,
       lastname:this.lastname,
@@ -95,6 +91,7 @@ export class UserForm {
     return value.toUpperCase();
   }
 
+  //Clases reutilizables de validacion
   private validationLength(value: string, minLength: number, fieldName: string) {
     if(value.trim().length < minLength) {
       alert(`${fieldName} debe tener al menos ${minLength} caracteres.`);
@@ -109,9 +106,26 @@ export class UserForm {
     }
   }
 
-  private validationAge(value: number, max: number | null = null, min: number | null, fieldName: string = "Edad") {
-    if(value <= 0) {
-      alert("Por favor, ingrese una edad válida.");
+  private validationRangeNumber(value: number, max: number | null = null, min: number | null, fieldName: string = "Edad") {
+    if((min !== null && value < min) || (max !== null && value > max)) {
+      if((min !== null && max !== null)) {
+        alert(`${fieldName} debe estar entre ${min} y ${max}.`);
+        throw "Validation error";
+      }else if(min !== null) {
+        alert(`${fieldName} debe ser mayor o igual a ${min}.`);
+        throw "Validation error";
+      }else if(max !== null) {
+        alert(`${fieldName} debe ser menor o igual a ${max}.`);
+        throw "Validation error";
+      }
+      alert(`${fieldName} debe estar entre ${min} y ${max}.`);
+      throw "Validation error";
+    }
+  }
+
+  private validationRequired(value: string, fieldName: string) {
+    if(!value.trim()) {
+      alert(`${fieldName} es un campo requerido.`);
       throw "Validation error";
     }
   }
