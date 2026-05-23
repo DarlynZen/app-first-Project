@@ -1,4 +1,4 @@
-import { Directive } from "@angular/core";
+import { Directive, Input } from "@angular/core";
 import { AbstractControl, ValidationErrors, Validator, NG_VALIDATORS } from "@angular/forms";
 
 @Directive({
@@ -14,8 +14,10 @@ import { AbstractControl, ValidationErrors, Validator, NG_VALIDATORS } from "@an
 })
 
 export class EmailValidation implements Validator {
+  @Input('emailValidation') options = { fieldName: "Campo" }
+
   //Este metodo es el que usa Validator
-  //validate va a ser referencia a un control, que va a estar asociado a los campos inpyt y select
+  //validate va a ser referencia a un control, que va a estar asociado a los campos input y select
   //Primero ejecuta el validador y evalua si el valor del control es valido o no, si es valido devuelve null, si no es valido devuelve un objeto con la propiedad email: true
   validate(control: AbstractControl): ValidationErrors | null {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //restriccion a cumplir
@@ -27,7 +29,7 @@ export class EmailValidation implements Validator {
 
     //Si el valor del control no coincide con el regex, es decir se regresa que el email es invalido o no cumple con la validacion
     if(!emailRegex.test(control.value)) {
-      return { emailInvalid: true };
+      return { emailInvalid: `El campo '${this.options.fieldName}' debe ser un correo electrónico válido` };
     }
     //si regresa null, es decir el email es valido
     return null;

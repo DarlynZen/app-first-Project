@@ -2,10 +2,12 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { IUser, IGender } from '../interfaces/user';
 import { FormsModule, NG_VALIDATORS, NgForm } from '@angular/forms';
 import { EmailValidation } from "./directives/email";
+import { LengthValidation } from './directives/length';
+import { RangeValidation } from './directives/range';
 
 @Component({
   selector: 'app-user-form',
-  imports: [FormsModule, EmailValidation],
+  imports: [FormsModule, EmailValidation, LengthValidation, RangeValidation],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
@@ -25,18 +27,11 @@ export class UserForm {
     gender: "Masculino"
   }
 
-  /* name = "";
-  lastname = "";
-  email = "";
-  age = 0;
-  gender = "Masculino"; */
   isEditMode = false;
   id: number | undefined;
-  
   title = "Create";
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
     console.log(this.userForm);
@@ -45,7 +40,6 @@ export class UserForm {
   ngOnChanges(){
     //si editUser es diferente de indefinido
     if(this.editUser) {
-      console.log("Usuario recibido para edición:", this.editUser);
       this.formData.name = this.editUser.name;
       this.formData.lastname = this.editUser.lastname;
       this.formData.email = this.editUser.email;
@@ -67,17 +61,15 @@ export class UserForm {
 
   onSubmit(form: NgForm) {
     //this.validationRequired(this.formData.name, "Nombre");
-    this.validationRequired(this.formData.lastname, "Apellido");
-    this.validationRequired(this.formData.email, "Correo");
-    this.validationRequired(this.formData.age.toString(), "Edad");
-    this.validationRequired(this.formData.gender, "Genero");
-
+    /*this.validationRequired(this.formData.lastname, "Apellido");
+      this.validationRequired(this.formData.email, "Correo");
+      this.validationRequired(this.formData.age.toString(), "Edad");
+      this.validationRequired(this.formData.gender, "Genero");
+    */
     //this.validationLength(this.formData.name, 3, "Nombre")
-    this.validationLength(this.formData.lastname, 3, "Apellido")
+    //this.validationLength(this.formData.lastname, 3, "Apellido")
     //this.validationEmail(this.formData.email);
-    this.validationRangeNumber(this.formData.age, 120, 0, "Edad");
-
-    console.log("Formulario", this.userForm);
+    //this.validationRangeNumber(this.formData.age, 120, 1, "Edad");
 
     if(this.userForm.valid) {
       this.onCreate.emit({
@@ -90,27 +82,20 @@ export class UserForm {
     });
 
       this.reset();
+    } else {
+      this.userForm.form.markAllAsTouched(); //marcar todos los campos como tocados para mostrar los mensajes de error de validación
     }
   }
 
   reset(){
-    this.formData.name = "";
-    this.formData.lastname = "";
-    this.formData.email = "";
-    this.formData.age = 0;
-    this.formData.gender = "Masculino";
-    this.isEditMode = false;
-    //el undefined no se asigna, pero es una excepcion en este caso para indicar que no hay un id asignado, ya que el id se maneja internamente en el componente Home y no debe ser modificado por el componente UserForm, por lo tanto se asigna undefined para indicar que no hay un id asignado, en lugar de null o un valor numérico específico.
-    this.id = undefined;
-    this.title = "Create";
-  }
+    this.userForm.resetForm()}
 
   changeUpperCase(value: string): string {
     return value.toUpperCase();
   }
 
   //Clases reutilizables de validacion
-  private validationLength(value: string, minLength: number, fieldName: string) {
+  /* private validationLength(value: string, minLength: number, fieldName: string) {
     if(value.trim().length < minLength) {
       alert(`${fieldName} debe tener al menos ${minLength} caracteres.`);
       //excepcion de validacion con mensajes por consola
@@ -146,6 +131,6 @@ export class UserForm {
       alert(`${fieldName} es un campo requerido.`);
       throw "Validation error";
     }
-  }
+  } */
 }
 
