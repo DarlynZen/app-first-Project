@@ -21,10 +21,6 @@ export class UserDetail {
   @Output() onDelete: EventEmitter<number> = new EventEmitter();
   @Output() onEdit: EventEmitter<IUser> = new EventEmitter();
 
-  ngOnChange(){
-    console.log('UserDetail - ngOnChange', this.user);
-  }
-
   delete($event: Event){
     //evitar que se ejecute el evento click de editar del contenedor padre (div.info) al seleccionar una fila
     $event.stopPropagation();

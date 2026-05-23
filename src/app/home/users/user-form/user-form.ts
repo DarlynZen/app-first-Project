@@ -1,10 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { IUser, IGender } from '../interfaces/user';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NG_VALIDATORS, NgForm } from '@angular/forms';
+import { EmailValidation } from "./directives/email";
 
 @Component({
   selector: 'app-user-form',
-  imports: [FormsModule],
+  imports: [FormsModule, EmailValidation],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
@@ -16,11 +17,19 @@ export class UserForm {
   //Ubicar NgForm
   @ViewChild('userForm') userForm!: NgForm;
 
-  name = "";
+  formData =  {
+    name: "",
+    lastname: "",
+    email: "",
+    age: 0,
+    gender: "Masculino"
+  }
+
+  /* name = "";
   lastname = "";
   email = "";
   age = 0;
-  gender = "Masculino";
+  gender = "Masculino"; */
   isEditMode = false;
   id: number | undefined;
   
@@ -29,58 +38,67 @@ export class UserForm {
   constructor() {
   }
 
+  ngOnInit() {
+    console.log(this.userForm);
+  }
+
   ngOnChanges(){
     //si editUser es diferente de indefinido
     if(this.editUser) {
-      this.name = this.editUser.name;
-      this.lastname = this.editUser.lastname;
-      this.email = this.editUser.email;
-      this.age = this.editUser.age
-      this.gender = this.editUser.gender;
+      console.log("Usuario recibido para edición:", this.editUser);
+      this.formData.name = this.editUser.name;
+      this.formData.lastname = this.editUser.lastname;
+      this.formData.email = this.editUser.email;
+      this.formData.age = this.editUser.age
+      this.formData.gender = this.editUser.gender;
       this.isEditMode = true;
       this.id = this.editUser.id;
       this.title = "Edit";
 
-      this.userForm.setValue({
-        name: this.name,
-        lastname: this.lastname,
-        email: this.email,
-        age: this.age,
-        gender: this.gender
-      });
+      /* this.userForm.setValue({
+        name: this.formData.name,
+        lastname: this.formData.lastname,
+        email: this.formData.email,
+        age: this.formData.age,
+        gender: this.formData.gender
+      }); */
     }
   }
 
-  onSubmit() {
-    this.validationRequired(this.name, "Nombre");
-    this.validationRequired(this.lastname, "Apellido");
-    this.validationRequired(this.email, "Correo");
-    this.validationRequired(this.age.toString(), "Edad");
-    this.validationRequired(this.gender, "Genero");
+  onSubmit(form: NgForm) {
+    //this.validationRequired(this.formData.name, "Nombre");
+    this.validationRequired(this.formData.lastname, "Apellido");
+    this.validationRequired(this.formData.email, "Correo");
+    this.validationRequired(this.formData.age.toString(), "Edad");
+    this.validationRequired(this.formData.gender, "Genero");
 
-    this.validationLength(this.name, 3, "Nombre")
-    this.validationLength(this.lastname, 3, "Apellido")
-    this.validationEmail(this.email);
-    this.validationRangeNumber(this.age, 120, 0, "Edad");
+    //this.validationLength(this.formData.name, 3, "Nombre")
+    this.validationLength(this.formData.lastname, 3, "Apellido")
+    //this.validationEmail(this.formData.email);
+    this.validationRangeNumber(this.formData.age, 120, 0, "Edad");
 
-    this.onCreate.emit({
-      name:this.name,
-      lastname:this.lastname,
-      email:this.email,
-      age:this.age,
-      gender:this.gender as IGender,
+    console.log("Formulario", this.userForm);
+
+    if(this.userForm.valid) {
+      this.onCreate.emit({
+      name:this.formData.name,
+      lastname:this.formData.lastname,
+      email:this.formData.email,
+      age:this.formData.age,
+      gender:this.formData.gender as IGender,
       id: this.id, //si id es nulo, se asigna un valor único basado en la fecha actual, de lo contrario se asigna el valor de id existente (en caso de edición)
     });
 
-    this.reset();
+      this.reset();
+    }
   }
 
   reset(){
-    this.name = "";
-    this.lastname = "";
-    this.email = "";
-    this.age = 0;
-    this.gender = "Masculino";
+    this.formData.name = "";
+    this.formData.lastname = "";
+    this.formData.email = "";
+    this.formData.age = 0;
+    this.formData.gender = "Masculino";
     this.isEditMode = false;
     //el undefined no se asigna, pero es una excepcion en este caso para indicar que no hay un id asignado, ya que el id se maneja internamente en el componente Home y no debe ser modificado por el componente UserForm, por lo tanto se asigna undefined para indicar que no hay un id asignado, en lugar de null o un valor numérico específico.
     this.id = undefined;
