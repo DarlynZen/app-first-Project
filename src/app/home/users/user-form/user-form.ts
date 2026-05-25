@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { IUser, IGender } from '../interfaces/user';
-import { ReactiveFormsModule } from '@angular/forms';
-import { EmailValidation } from "./directives/email";
-import { LengthValidation } from './directives/length';
-import { RangeValidation } from './directives/range';
-import { LimitByGender } from './directives/limitByGender';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { validateEmailDomain } from '../validators/email';
+import { validateLimitByGender } from '../validators/limit-by-gender';
+import { ErrorValidations } from '../messages/error';
 
 @Component({
   selector: 'app-user-form',
-  imports: [ReactiveFormsModule, EmailValidation, LengthValidation, RangeValidation, LimitByGender],
+  imports: [ReactiveFormsModule, ErrorValidations],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
@@ -30,7 +29,43 @@ export class UserForm {
   id: number | undefined;
   title = "Create";
 
-  constructor() {}
+  //Definimos el FormGroup para manejar el formulario reactivo, esto nos permite tener un control total sobre los campos del formulario, sus validaciones y su estado. Al usar FormGroup, podemos agrupar varios FormControl juntos, lo que facilita la gestión de formularios complejos y la aplicación de validaciones personalizadas.
+  fg!: FormGroup;
 
+  //Definimos un array de dominios de correo electrónico válidos para la validación del campo
+  domains = ["company.com", "pe.company.com", "org.company.com"];
+
+  constructor() {
+    this.createForm();
+  }
+
+  private createForm(){
+    this.fg = new FormGroup({
+      //Definimos los FormControl para cada campo del formulario, esto nos permite tener un control total sobre cada campo individualmente, incluyendo su valor, estado y validaciones. Al usar FormControl, podemos aplicar validaciones específicas a cada campo y gestionar su estado de manera independiente dentro del FormGroup.
+      //FormControl tiene argumentos. El primero es el valor inicial del campo, el segundo es un array de validadores sincronos y el tercero es un array de validadores asincronos.
+      id: new FormControl(null),
+      name: new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      lastname: new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      email: new FormControl(null, [Validators.required, Validators.pattern(/^[^s@]+@[^\s@]+\.[^\s@]+$/), validateEmailDomain(this.domains)]),
+      age: new FormControl(null, [Validators.required, Validators.min(18), Validators.max(120)]),
+      gender: new FormControl(null, [Validators.required])
+    },
+    { validators: [validateLimitByGender] });
+  }
+
+  public onSubmit(){
+    console.log(this.fg);
+  }
+
+  public reset(){
+    this.fg.reset();
+  }
+
+  //Esta función recibe un FormGroup y el nombre del control, y devuelve un array de mensajes de error para ese control.
+  public showErrors(fg: FormGroup, controlName: string, title: string): string[]{
+    return errorsVariations(fg, controlName, title);
+  }
+
+ 
 }
 
