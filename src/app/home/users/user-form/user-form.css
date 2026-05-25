@@ -28,13 +28,13 @@ form{
     width: 100%;
     border-radius: 4px;
   }
+}
 
-  span.error{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
-  }
+span.error{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }
 
 button{

@@ -1,13 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { IUser, IGender } from '../interfaces/user';
-import { FormsModule, NG_VALIDATORS, NgForm } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { EmailValidation } from "./directives/email";
 import { LengthValidation } from './directives/length';
 import { RangeValidation } from './directives/range';
+import { LimitByGender } from './directives/limitByGender';
 
 @Component({
   selector: 'app-user-form',
-  imports: [FormsModule, EmailValidation, LengthValidation, RangeValidation],
+  imports: [FormsModule, EmailValidation, LengthValidation, RangeValidation, LimitByGender],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
@@ -24,7 +25,8 @@ export class UserForm {
     lastname: "",
     email: "",
     age: 0,
-    gender: "Masculino"
+    gender: "Masculino",
+    id: -1
   }
 
   isEditMode = false;
@@ -33,53 +35,24 @@ export class UserForm {
 
   constructor() {}
 
-  ngOnInit() {
-    console.log(this.userForm);
-  }
-
   ngOnChanges(){
     //si editUser es diferente de indefinido
+    //editUser es una entrada
     if(this.editUser) {
-      this.formData.name = this.editUser.name;
-      this.formData.lastname = this.editUser.lastname;
-      this.formData.email = this.editUser.email;
-      this.formData.age = this.editUser.age
-      this.formData.gender = this.editUser.gender;
-      this.isEditMode = true;
-      this.id = this.editUser.id;
-      this.title = "Edit";
 
-      /* this.userForm.setValue({
-        name: this.formData.name,
-        lastname: this.formData.lastname,
-        email: this.formData.email,
-        age: this.formData.age,
-        gender: this.formData.gender
-      }); */
+      //esto reemplaza a lo demas
+      //editUser es un objeto que contiene los datos del usuario a editar, incluyendo su id, nombre, apellido, correo, edad y género. Al asignar este objeto a userForm.setValue(), se llenan los campos del formulario con los valores correspondientes del usuario seleccionado para edición. Esto permite que el formulario muestre la información actual del usuario, facilitando la tarea de modificarla según sea necesario.
+      this.userForm.form.patchValue(this.editUser)
+      this.id = this.editUser.id;
+      this.isEditMode = true;
+      this.title = "Edit";
     }
   }
 
-  onSubmit(form: NgForm) {
-    //this.validationRequired(this.formData.name, "Nombre");
-    /*this.validationRequired(this.formData.lastname, "Apellido");
-      this.validationRequired(this.formData.email, "Correo");
-      this.validationRequired(this.formData.age.toString(), "Edad");
-      this.validationRequired(this.formData.gender, "Genero");
-    */
-    //this.validationLength(this.formData.name, 3, "Nombre")
-    //this.validationLength(this.formData.lastname, 3, "Apellido")
-    //this.validationEmail(this.formData.email);
-    //this.validationRangeNumber(this.formData.age, 120, 1, "Edad");
-
+  onSubmit() {
     if(this.userForm.valid) {
-      this.onCreate.emit({
-      name:this.formData.name,
-      lastname:this.formData.lastname,
-      email:this.formData.email,
-      age:this.formData.age,
-      gender:this.formData.gender as IGender,
-      id: this.id, //si id es nulo, se asigna un valor único basado en la fecha actual, de lo contrario se asigna el valor de id existente (en caso de edición)
-    });
+      //Los ... son para crear un nuevo objeto a partir de los valores del formulario, y agregarle el id si es que existe, esto es necesario para que el componente padre pueda identificar si se esta creando un nuevo usuario o editando uno existente, y manejar la lógica correspondiente en cada caso.
+      this.onCreate.emit({...this.userForm.value, id: this.id});
 
       this.reset();
     } else {
@@ -88,49 +61,14 @@ export class UserForm {
   }
 
   reset(){
-    this.userForm.resetForm()}
+    this.userForm.resetForm()
+    this.title = "Create";
+    this.isEditMode = false;
+    this.id = undefined;
+  }
 
   changeUpperCase(value: string): string {
     return value.toUpperCase();
   }
-
-  //Clases reutilizables de validacion
-  /* private validationLength(value: string, minLength: number, fieldName: string) {
-    if(value.trim().length < minLength) {
-      alert(`${fieldName} debe tener al menos ${minLength} caracteres.`);
-      //excepcion de validacion con mensajes por consola
-      throw "Validation error";
-    }
-  }
-  private validationEmail(value: string) {
-    if(!value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      alert("El correo debe tener un formato válido.");
-      throw "Validation error";
-    }
-  }
-
-  private validationRangeNumber(value: number, max: number | null = null, min: number | null, fieldName: string = "Edad") {
-    if((min !== null && value < min) || (max !== null && value > max)) {
-      if((min !== null && max !== null)) {
-        alert(`${fieldName} debe estar entre ${min} y ${max}.`);
-        throw "Validation error";
-      }else if(min !== null) {
-        alert(`${fieldName} debe ser mayor o igual a ${min}.`);
-        throw "Validation error";
-      }else if(max !== null) {
-        alert(`${fieldName} debe ser menor o igual a ${max}.`);
-        throw "Validation error";
-      }
-      alert(`${fieldName} debe estar entre ${min} y ${max}.`);
-      throw "Validation error";
-    }
-  }
-
-  private validationRequired(value: string, fieldName: string) {
-    if(!value.trim()) {
-      alert(`${fieldName} es un campo requerido.`);
-      throw "Validation error";
-    }
-  } */
 }
 

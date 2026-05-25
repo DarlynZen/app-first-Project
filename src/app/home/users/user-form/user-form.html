@@ -1,4 +1,4 @@
-<form #userForm="ngForm">
+<form #userForm="ngForm" limitByGender>
   <div class="field">
     <label for="name">Nombre:</label>
     <!--() para salidas, [] para entradas. En lugar de event podria ser string o integer, event es mas general-->
@@ -51,6 +51,10 @@
     </select>
   </div>
 
-  <button type="button" (click)="onSubmit(userForm)" [disabled]="!userForm.valid">{{title}}</button>
+  <button type="button" (click)="onSubmit()" [disabled]="!userForm.valid">{{title}}</button>
   <button type="button" (click)="reset()">Limpiar</button>
+
+  @if(userForm.errors ?.['limitByGender'] && userForm.touched) {
+    <span class="error">{{ userForm.errors ?.['limitByGender'] }}</span>
+  }
 </form>
