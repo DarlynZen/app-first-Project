@@ -9,13 +9,6 @@ import { IUser } from '../interfaces/user';
 })
 export class UserDetail {
   //uso de signo de exclamación para indicar que estas propiedades no tendrá valores nulos
-  /* @Input() name!: string;
-  @Input() lastName!: string;
-  @Input() email!: string;
-  @Input() age!: number;
-  @Input() gender!: string; */
-
-  //Lo anterior es lo mismo que decir esto
   @Input() user!: IUser;
   @Input() index!: number;
   @Output() onDelete: EventEmitter<number> = new EventEmitter();
