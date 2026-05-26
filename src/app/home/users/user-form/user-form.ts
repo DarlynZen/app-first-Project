@@ -62,9 +62,9 @@ export class UserForm {
   }
 
   //Esta función recibe un FormGroup y el nombre del control, y devuelve un array de mensajes de error para ese control.
-  public showErrors(fg: FormGroup, controlName: string, title: string): string[]{
+  /* public showErrors(fg: FormGroup, controlName: string, title: string): string[]{
     return errorsVariations(fg, controlName, title);
-  }
+  } */
 
  
 }

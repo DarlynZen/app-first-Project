@@ -17,7 +17,7 @@ export const validateEmailDomain = (domains: string[]): ValidatorFn => {
     }
 }
 
-//Validador como clase estática, se puede usar cualquiera de los dos
+/* //Validador como clase estática, se puede usar cualquiera de los dos
 export class CustomValidators {
     static validateEmailDomain(domains: string[]): ValidatorFn {
         return (control: AbstractControl) => {
@@ -32,4 +32,4 @@ export class CustomValidators {
             return null;
         }
     }
-}
+} */
