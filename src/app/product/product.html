@@ -1,0 +1,10 @@
+<!-- Se hace este cambio para que product() se ejecute una vez, en lugar de 3 veces-->
+@let prd = product();
+@if (prd) {
+  <div>
+    <strong>{{ prd.name }}</strong>
+    <span>Price: US$ {{ prd.price }}</span>
+    <hr>
+    <button (click)="addToCart(prd)">Add to Cart</button>
+  </div>
+}
