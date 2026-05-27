@@ -9,9 +9,9 @@
 
 <div class="container">
   <div class="zone">
-    <app-product-list></app-product-list>
+    <app-product-list (onAddToCart)="addToCart($event)"></app-product-list>
   </div>
   <div class="zone">
-    <app-cart></app-cart>
+    <app-cart [cart]="cart()" (onRemove)="removeItem($event)"></app-cart>
   </div>
 </div>

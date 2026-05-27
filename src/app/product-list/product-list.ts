@@ -67,7 +67,8 @@ export class ProductList {
 
   addToCart(product: IProduct) {
     // Aquí puedes implementar la lógica para agregar el producto al carrito
-    console.log('Producto agregado al carrito desde ProductList:', product);
+    console.log('Product agregado al carro:', product);
+    this.onAddToCart.emit(product);
   }
 
 }

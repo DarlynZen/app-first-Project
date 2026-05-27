@@ -1,9 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
+import { IProduct } from '../interfaces/product';
+import { CartItem } from '../cart-item/cart-item';
 
 @Component({
   selector: 'app-cart',
-  imports: [],
+  imports: [CartItem],
   templateUrl: './cart.html',
   styleUrl: './cart.scss',
 })
-export class Cart {}
+export class Cart {
+
+  //el input es obligatorio
+  cart = input<(IProduct & {quantity: number})[]>();
+  //una salida 
+  onRemove = output<number>();
+
+  removeItem(productId: number){
+    this.onRemove.emit(productId);
+  }
+}
