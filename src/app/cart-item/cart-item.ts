@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { IProduct } from '../interfaces/product';
+import { ProductService } from '../services/product';
 
 @Component({
   selector: 'app-cart-item',
@@ -13,10 +14,20 @@ export class CartItem {
   //se enviara una salida con un valor de dato numero, que sera el id
   onRemove = output<number>();
 
+  productService = new ProductService();
+
   removeItem(){
     const it = this.item();
     if(it){
       this.onRemove.emit(it.id);
+      //al remover el item se busca el producto en la lista de productos, si se encuentra se aumenta el stock total 
+      const prd = this.productService.productList.find(p => p.id === it.id);
+      if (prd) {
+        prd.stock += it.quantity;
+      }
+
+      console.log('Update product stock:', prd);
+      console.log('Current product list:', this.productService.productList);
     }
   }
 }

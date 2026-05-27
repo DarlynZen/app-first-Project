@@ -17,7 +17,11 @@ export class Product {
   addToCart(product: IProduct) {
     // Aquí puedes implementar la lógica para agregar el producto al carrito
     console.log('Producto agregado al carrito:', product);
+
+    if(product.stock <= 0) {
+      console.log('Producto sin stock disponible');
+      return;
+    }
     this.onAddToCart.emit(product);
   }
-
 }
