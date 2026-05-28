@@ -2,7 +2,7 @@ import { signal } from '@angular/core';
 import { IProduct } from '../interfaces/product';
 
 export class ProductService {
-    public productList: IProduct[] = [
+    public productList = signal<IProduct[]>([
         { id: 1, name: 'Laptop Asus ZenBook 14 i7-1355U 16GB 512GB', price: 1099, stock: 18 },
         { id: 2, name: 'Laptop Dell XPS 13 i5-1340P 16GB 512GB', price: 1199, stock: 7 },
         { id: 3, name: 'Laptop Lenovo ThinkPad T14 Ryzen 7 7840U 16GB 1TB', price: 1299, stock: 12 },
@@ -53,20 +53,76 @@ export class ProductService {
         { id: 48, name: 'Smartwatch Samsung Galaxy Watch 6 44mm', price: 299, stock: 13 },
         { id: 49, name: 'External SSD SanDisk Extreme 1TB USB-C', price: 129, stock: 21 },
         { id: 50, name: 'Docking Station Anker 777 Thunderbolt 4', price: 299, stock: 7 }
-    ];
+    ]);
 
-    public cart = signal<(IProduct & {quantity: number})[]>([]);
+    public cart = signal<(IProduct & { quantity: number })[]>([]);
 
-    private constructor(){}
-
-    //la clase se instancia a sí misma una vez para ser usada como singleton
-    static instance: ProductService;
-
-    //método para obtener la instancia de la clase
-    static create(): ProductService {
-        if (!ProductService.instance) {
-            ProductService.instance = new ProductService();
-        }
-        return ProductService.instance;
+    constructor() {
+        console.log('ProductService initialized');
     }
+
+    addToCart(product: IProduct) {
+        //se comprueba si ya existe el producto en el carrito, si es así se actualiza la cantidad, si no se agrega el producto al carrito con una cantidad de 1
+        const existingProduct = this.cart().find(item => item.id === product.id);
+        if (existingProduct) {
+            this.cart.update(prev => prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item));
+        } else {
+            this.cart.update(prev => [...prev, { ...product, quantity: 1 }]);
+        }
+        this.reduceStock(product.id);
+    }
+
+    private reduceStock(productId: number) {
+        const prd = this.productList().find(p => p.id === productId);
+        if (prd && prd.stock > 0) {
+            prd.stock -= 1;
+
+            const products = this.productList();
+            const index = products.findIndex(p => p.id === productId);
+            //si encuentra el producto en la lista de productos, se actualiza el stock del producto en la lista de productos
+            if (index !== -1) {
+                this.productList.update(prev => {
+                    const updatedProducts = [...prev];
+                    updatedProducts[index] = { ...updatedProducts[index], stock: prd.stock };
+                    return updatedProducts;
+                });
+            }
+        }
+    }
+
+    removeFromCart(productId: number) {
+        //primero busca si el producto existe en el carrito, si es así se elimina del carrito y se aumenta el stock del producto en la lista de productos
+        const productInCart = this.cart().find(item => item.id === productId);
+        if (productInCart) {
+            this.cart.update(prev => prev.filter(item => item.id !== productId));
+            const prd = this.productList().find(p => p.id === productId);
+            if (prd) {
+                prd.stock += productInCart.quantity;
+
+                const products = this.productList();
+                const index = products.findIndex(p => p.id === productId);
+                //si encuentra el producto en la lista de productos, se actualiza el stock del producto en la lista de productos
+                if (index !== -1) {
+                    this.productList.update(prev => {
+                        const updatedProducts = [...prev];
+                        updatedProducts[index] = { ...updatedProducts[index], stock: prd.stock };
+                        return updatedProducts;
+                    });
+                }
+            }
+        }
+    }
+
+    /*   
+    
+        //la clase se instancia a sí misma una vez para ser usada como singleton, esto permite que la misma instancia del servicio sea compartida entre los componentes que lo usen, en este caso product-list y cart, lo que facilita la gestión del estado del carrito y la lista de productos sin necesidad de pasar datos entre componentes o usar un sistema de gestión de estado más complejo.
+        static instance: ProductService;
+    
+        //método para obtener la instancia de la clase
+        static create(): ProductService {
+            if (!ProductService.instance) {
+                ProductService.instance = new ProductService();
+            }
+            return ProductService.instance;
+        } */
 }

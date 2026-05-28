@@ -1,4 +1,4 @@
-import { Component,computed,effect,linkedSignal,signal } from '@angular/core';
+import { Component,computed,effect,Inject,linkedSignal,signal, WritableSignal } from '@angular/core';
 import { ProductList } from './product-list/product-list';
 import { Cart } from './cart/cart';
 import { IProduct } from './interfaces/product';
@@ -32,12 +32,20 @@ export class App {
     //se agrega la propiedad de quantity al producto para poder llevar el control de cuantos productos se han agregado al carrito
     //cart = signal<(IProduct & {quantity: number})[]>([]);
 
-    //uso de servicio
-    productService = new ProductService();
+  //usando metodo create del service para que se instancie una sola vez y se comparta entre los componentes que lo usen, en este caso product-list y cart
+    //productService = ProductService.create();
 
-    cart = this.productService.cart;
+    /* productService: ProductService;
 
-    addToCart(product: IProduct) {
+    cart: WritableSignal<(IProduct & {quantity: number})[]>;
+
+
+    constructor(@Inject("ProvideProduct") productService: ProductService){
+      this.productService = productService;
+      this.cart = this.productService.cart;
+    } */
+
+    /* addToCart(product: IProduct) {
       //se comprueba si ya existe el producto en el carrito, si es así se actualiza la cantidad, si no se agrega el producto al carrito con una cantidad de 1
       const existingProduct = this.productService.cart().find(item => item.id === product.id);
       if (existingProduct) {
@@ -50,5 +58,5 @@ export class App {
     //se hace desde aqui ya que es cart.ts usa un signal tipo input y no acepta los metodos de update o set
     removeItem(productId: number) {
       this.cart.update(prev => prev.filter(item => item.id !== productId));
-    }
+    } */
 }

@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, Inject, input, output } from '@angular/core';
 import { IProduct } from '../interfaces/product';
 import { ProductService } from '../services/product';
 
@@ -14,10 +14,14 @@ export class CartItem {
   //se enviara una salida con un valor de dato numero, que sera el id
   onRemove = output<number>();
 
-  productService = new ProductService();
+  //productService: ProductService;
+
+/*   constructor(@Inject("ProvideProduct") productService: ProductService) {
+    this.productService = productService;
+  } */
 
   removeItem(){
-    const it = this.item();
+    /* const it = this.item();
     if(it){
       this.onRemove.emit(it.id);
       //al remover el item se busca el producto en la lista de productos, si se encuentra se aumenta el stock total 
@@ -28,6 +32,11 @@ export class CartItem {
 
       console.log('Update product stock:', prd);
       console.log('Current product list:', this.productService.productList);
-    }
+    } */
+
+      const it = this.item();
+      if(it){
+        this.onRemove.emit(it.id);
+      }
   }
 }
