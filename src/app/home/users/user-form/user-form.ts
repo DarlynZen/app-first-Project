@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { IUser, IGender } from '../interfaces/user';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { IUser } from '../interfaces/user';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { validateEmailDomain } from '../validators/email';
 import { validateLimitByGender } from '../validators/limit-by-gender';
-import { ErrorValidations } from '../messages/error';
+import { form } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-user-form',
-  imports: [ReactiveFormsModule, ErrorValidations],
+  imports: [],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
@@ -16,7 +16,7 @@ export class UserForm {
   @Output() onCreate: EventEmitter < IUser > = new EventEmitter();
   @Input() editUser: IUser | null = null;
 
-  formData : IUser = {
+  private originalUser : IUser = {
     name: "",
     lastname: "",
     email: "",
@@ -25,12 +25,14 @@ export class UserForm {
     id: -1
   }
 
+  //al usar un form-signal se debe de usar un modelo
+  private userModel = signal<IUser>(this.originalUser);
+
+  public userForm = form(this.userModel, {});
+
   isEditMode = false;
   id: number | undefined;
   title = "Create";
-
-  //Definimos el FormGroup para manejar el formulario reactivo, esto nos permite tener un control total sobre los campos del formulario, sus validaciones y su estado. Al usar FormGroup, podemos agrupar varios FormControl juntos, lo que facilita la gestión de formularios complejos y la aplicación de validaciones personalizadas.
-  fg!: FormGroup;
 
   //Definimos un array de dominios de correo electrónico válidos para la validación del campo
   domains = ["company.com", "pe.company.com", "org.company.com"];
@@ -54,18 +56,11 @@ export class UserForm {
   }
 
   public onSubmit(){
-    console.log(this.fg);
+    //console.log(this.fg);
   }
 
   public reset(){
-    this.fg.reset();
-  }
-
-  //Esta función recibe un FormGroup y el nombre del control, y devuelve un array de mensajes de error para ese control.
-  /* public showErrors(fg: FormGroup, controlName: string, title: string): string[]{
-    return errorsVariations(fg, controlName, title);
-  } */
-
- 
+    //this.fg.reset();
+  } 
 }
 

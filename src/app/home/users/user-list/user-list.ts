@@ -36,20 +36,4 @@ export class UserList {
   edit(user: IUser) {
     this.onEdit.emit(user);
   }
-  
-  //el valor de columns se obtiene a partir de las claves del primer objeto del array usersActive
-/*   columns = Object.keys(this.usersActive[0]);
- */
-
-  /* for (let index = 0; index < array.length; index++) {
-        const element = array[index];
-    }
-
-    for (const user of usersActive) {
-        console.log(user.name);
-    }
-
-    usersActive.forEach(user => { console.log(user.name)})
- */
-
 }
