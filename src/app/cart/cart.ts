@@ -1,4 +1,4 @@
-import { Component, Inject, input, output, WritableSignal } from '@angular/core';
+import { Component, computed, Inject, input, output, Signal } from '@angular/core';
 import { IProduct } from '../interfaces/product';
 import { CartItem } from '../cart-item/cart-item';
 import { ProductService } from '../services/product';
@@ -11,24 +11,22 @@ import { ProductService } from '../services/product';
 })
 export class Cart {
 
-/*   //el input es obligatorio
-  cart = input<(IProduct & {quantity: number})[]>();
-  //una salida 
-  onRemove = output<number>();
-
-  removeItem(productId: number){
-    this.onRemove.emit(productId);
-  } */
-
   productService: ProductService;
-  cart: WritableSignal<(IProduct & {quantity: number})[]>;
-  
+  productListCart: Signal<(IProduct & {quantity: number})[]>;
+
+  //funcion signal que devuelve un valor, se ejecuta si es que 1 o mas de los signals que contienen la funciona han sido modificados
+  total = computed(() => {
+    return this.productListCart().reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  });
+
   constructor(@Inject("ProvideProduct") productService: ProductService) {
     this.productService = productService;
-    this.cart = this.productService.cart;
+    this.productListCart = this.productService.itemsInCart;
   }
 
   removeItem(productId: number) {
     this.productService.removeFromCart(productId);
   }
+
+
 }

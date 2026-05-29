@@ -1,19 +1,34 @@
-<!-- <div>Operator 1: {{operator1()}}</div>
-<div>Operator 2: {{operator2()}}</div>
-<div>Sum: {{sum()}}</div>
-<div>Linked Sum: {{linkedSum()}}</div>
-<button (click)="operator2.set(100)">Set Operator 2 to 100</button>
-<button (click)="operator1.update(prevValue => prevValue + 10)">Increment Operator 1</button>
-<button (click)="operator1.set(0); operator2.set(0);">Reset Operators</button>
-<button (click)="linkedSum.update(prev => prev * 20)">Multiply Sum by 20</button> -->
+<div class="app-shell">
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand__mark" aria-hidden="true">◎</span>
+      <div class="brand__text">
+        <h1>Mercado directo</h1>
+        <p>Productos frescos, pagos seguros y un carrito claro.</p>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span class="meta-pill">Envio rapido</span>
+      <span class="meta-pill">Pago seguro</span>
+      <span class="meta-pill">Soporte 24/7</span>
+    </div>
+  </header>
 
-<div class="container">
-  <div class="zone">
-    <!--     <app-product-list (onAddToCart)="addToCart($event)"></app-product-list>-->
-    <app-product-list></app-product-list>
-  </div>
-  <div class="zone">
-    <!--     <app-cart [cart]="cart()" (onRemove)="removeItem($event)"></app-cart>-->
-    <app-cart></app-cart>
-  </div>
+  <main class="content-grid" aria-label="Secciones principales">
+    <section class="panel panel--catalog">
+      <div class="panel__heading">
+        <h2>Catalogo</h2>
+        <p>Explora y agrega productos con un solo clic.</p>
+      </div>
+      <app-product-list></app-product-list>
+    </section>
+
+    <section class="panel panel--cart">
+      <div class="panel__heading">
+        <h2>Tu carrito</h2>
+        <p>Revisa cantidades y prepara tu pedido.</p>
+      </div>
+      <app-cart></app-cart>
+    </section>
+  </main>
 </div>

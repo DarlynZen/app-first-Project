@@ -1,11 +1,29 @@
 <!-- Se hace este cambio para que product() se ejecute una vez, en lugar de 3 veces-->
 @let prd = product();
 @if (prd) {
-  <div>
-    <strong>{{ prd.name }}</strong>
-    <span>Price: US$ {{ prd.price }}</span>
-    <span>Stock: {{ prd.stock }}</span>
-    <hr>
-    <button (click)="addToCart(prd)">Add to Cart</button>
-  </div>
+  <article class="product-card">
+    <div class="product-card__info">
+      <strong class="product-card__name">{{ prd.name }}</strong>
+      <span class="product-card__price">US$ {{ prd.price }}</span>
+      <span
+        class="product-card__stock"
+        [class.is-low]="prd.stock > 0 && prd.stock <= 3"
+        [class.is-out]="prd.stock <= 0"
+      >
+        Stock: {{ prd.stock }}
+      </span>
+    </div>
+    <button
+      type="button"
+      class="product-card__cta"
+      (click)="addToCart(prd)"
+      [disabled]="prd.stock <= 0"
+    >
+      @if (prd.stock > 0) {
+        Agregar al carrito
+      } @else {
+        Sin stock
+      }
+    </button>
+  </article>
 }

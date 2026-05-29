@@ -1,10 +1,14 @@
 @let it = item();
 
-@if (it){
-    <div>
-        <strong>{{ it.name }}</strong>
-        <span>US$ {{ it.price }}</span>
-        <span>Quantity: {{ it.quantity }}</span>
-        <button (click)="removeItem()">Remove</button>
+@if (it) {
+    <div class="cart-item">
+        <div class="cart-item__info">
+            <strong class="cart-item__name">{{ it.name }}</strong>
+            <span class="cart-item__meta">US$ {{ it.price }} x {{ it.quantity }}</span>
+        </div>
+        <div class="cart-item__actions">
+            <span class="cart-item__subtotal">US$ {{ it.price * it.quantity }}</span>
+            <button type="button" class="cart-item__remove" (click)="removeItem()">Quitar</button>
+        </div>
     </div>
 }
