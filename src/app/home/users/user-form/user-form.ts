@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { IUser } from '../interfaces/user';
 import { form, max, min, minLength, required, requiredError, validate, FormField } from '@angular/forms/signals';
+import { ErrorValidations } from '../messages/error';
 
 
 @Component({
   selector: 'app-user-form',
-  imports: [FormField],
+  imports: [FormField, ErrorValidations],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
@@ -84,6 +85,9 @@ export class UserForm {
     //console.log(this.userForm().valid());
     console.log(this.userForm().errors());
     console.log(this.userForm().errorSummary());
+    console.log(this.userForm.name().errorSummary());
+
+    const nameValue = this.userForm.name();
   }
 
   public reset(){
