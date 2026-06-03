@@ -30,7 +30,7 @@ export class ErrorValidations {
     if (!this.fs.touched() || this.fs.valid()) { return [] }
 
     const messages: string[] = [];
-    const errors = this.fs.errorSummary();
+    const errors = this.fs.errors();
 
     errors.forEach(error => {
       messages.push(error?.message || "Error desconocido");

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { IUser } from '../interfaces/user';
-import { form, max, min, minLength, required, requiredError, validate, FormField } from '@angular/forms/signals';
+import { form, max, min, minLength, required, requiredError, validate, FormField, submit } from '@angular/forms/signals';
 import { ErrorValidations } from '../messages/error';
 
 
@@ -80,18 +80,11 @@ export class UserForm {
   title = "Create";
 
   public onSubmit(){
-    //con parentesis en el form y en la propiedad porque es un signal, si no se ponen los parentesis se estaria haciendo referencia a la función del signal y no al valor que retorna la función del signal 
-    //console.log(this.userForm().value());
-    //console.log(this.userForm().valid());
-    console.log(this.userForm().errors());
-    console.log(this.userForm().errorSummary());
-    console.log(this.userForm.name().errorSummary());
-
-    const nameValue = this.userForm.name();
+    submit(this.userForm, async() => undefined);
   }
 
   public reset(){
-
+    this.userForm().reset(this.originalUser);
   }
 
 }
