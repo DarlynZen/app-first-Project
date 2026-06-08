@@ -1,8 +1,22 @@
+<h2>{{ currentDateTime }}</h2>
 <ul>
-    <li><a href="/">Base</a></li>
-    <li><a href="/home">Home</a></li>
-    <li><a href="/economics">Economics</a></li>
-    <li><a href="/politics">Politics</a></li>
-    <li><a href="/sports">Sports</a></li>
+  <li><a routerLink="/">Base</a></li>
+  <li><a routerLink="/home">Home</a></li>
+  <li><a routerLink="/economics">Economics</a></li>
+  <li><a routerLink="/politics">Politics</a></li>
+  <li><a routerLink="/sports">Sports</a></li>
+  <li>Magazines</li>
+  <ul>
+    <li><a routerLink="/magazines/angeles">Los Angeles Times</a></li>
+    <li><a routerLink="/magazines/chicago">Chicago Tribune</a></li>
+    <li><a routerLink="/magazines/new-york">New York Times</a></li>
+    <li><a routerLink="/magazines/washington">Washington Post</a></li>
+  </ul>
+  <li><a routerLink="/magazines-economics">MagazinesEconomics</a></li>
+  <ul>
+    <li><a routerLink="/magazines-economics/gestion">Gestion</a></li>
+    <li><a routerLink="/magazines-economics/rumbo-economico">Rumbo Economico</a></li>
+    <li><a routerLink="/magazines-economics/semana-economica">Semana Economico</a></li>
+  </ul>
 </ul>
-<router-outlet/>
+<router-outlet />
