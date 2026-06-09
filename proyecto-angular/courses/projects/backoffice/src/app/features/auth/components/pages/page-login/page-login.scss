@@ -1,6 +1,16 @@
-.container{
+:host {
+    display: block;
+    min-height: 100dvh;
+}
+
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100dvh;
+    padding: 16px;
+    box-sizing: border-box;
+    background-image: url(/assets/images/background.png);
+    background-size: cover;
+    background-position: center;
 }
