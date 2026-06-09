@@ -10,7 +10,14 @@
     min-height: 100dvh;
     padding: 16px;
     box-sizing: border-box;
-    background-image: url(/assets/images/background.png);
+    background-image: url('/assets/images/background.png');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 16px;
+    }
 }
