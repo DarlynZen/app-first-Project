@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { IAuth } from '../../../interfaces/auth';
 import { form, FormField, required, requiredError, validate } from '@angular/forms/signals';
+import { ErrorValidations } from 'lib';
 
 @Component({
   selector: 'cdev-login',
@@ -18,6 +19,7 @@ import { form, FormField, required, requiredError, validate } from '@angular/for
     MatIconModule,
     MatInputModule,
     FormField,
+    ErrorValidations
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
