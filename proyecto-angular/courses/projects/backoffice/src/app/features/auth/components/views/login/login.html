@@ -11,16 +11,16 @@
       <mat-form-field class="login-field">
         <mat-label>Email</mat-label>
         <mat-icon matPrefix>mail</mat-icon>
-        <input matInput type="email" placeholder="name@company.com" autocomplete="email" [formField]="authForm.email" />
-        <cdev-lib-error-validations [fs]="authForm.email()"></cdev-lib-error-validations>
+        <input matInput type="email" placeholder="name@company.com" autocomplete="email" [formField]="authForm.email" /> 
       </mat-form-field>
-
+      <cdev-lib-error-validations [fs]="authForm.email()"></cdev-lib-error-validations>
+      
       <mat-form-field class="login-field">
         <mat-label>Password</mat-label>
         <mat-icon matPrefix>lock</mat-icon>
         <input matInput type="password" placeholder="Enter your password" autocomplete="current-password" [formField]="authForm.password" />
-        <cdev-lib-error-validations [fs]="authForm.password()"></cdev-lib-error-validations>
       </mat-form-field>
+      <cdev-lib-error-validations [fs]="authForm.password()"></cdev-lib-error-validations>
 
       <button mat-flat-button color="primary" type="button" (click)="save()" >Sign in</button>
     </form>
