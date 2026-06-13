@@ -10,6 +10,7 @@ import { form, FormField, required, requiredError, validate } from '@angular/for
 import { ErrorValidations } from 'lib';
 
 @Component({
+  standalone: true,
   selector: 'cdev-login',
   imports: [
     MatButtonModule,
@@ -38,11 +39,16 @@ export class Login {
   authForm = form(this.authModel, schema => {
     required(schema.email, { message: "El correo es requerido" });
     validate(schema.email, ctx => {
+      //Solo validar si el campo tiene valor
+      if (!ctx.value()) return null;
       //retornamos null si el correo es valido, de lo contrario retornamos un error con un mensaje personalizado
       return ctx.value().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) ? null : requiredError({ message: "El correo electrónico no es válido" });
     });
     required(schema.password, { message: "La contraseña es requerida" });
     validate(schema.password, ctx => {
+      //Solo validar si el campo tiene valor
+      if (!ctx.value()) return null;
+
       //la contraseña debe tener al menos 6 caracteres y al menos una letra mayúscula
       const pattern = /^(?=.*[A-Z]).{6,}$/;
       return pattern.test(ctx.value()) ? null : requiredError({ message: "La contraseña debe tener al menos 6 caracteres y una letra mayúscula" });

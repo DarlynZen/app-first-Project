@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Login } from '../../views/login/login';
 
 @Component({
+  standalone: true,
   selector: 'cdev-page-login',
   imports: [Login],
   templateUrl: './page-login.html',

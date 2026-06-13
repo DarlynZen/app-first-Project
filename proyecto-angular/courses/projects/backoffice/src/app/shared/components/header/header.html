@@ -1,0 +1,37 @@
+<mat-toolbar>
+  <div class="title">
+    <button matIconButton (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1>{{ title() }}</h1>
+  </div>
+
+  <div class="content">
+    <button matButton [matMenuTriggerFor]="menuApp">
+      <div class="content-button">
+        <span>Username</span>
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </div>
+    </button>
+  </div>
+</mat-toolbar>
+
+<!-- cada valor que tenga un # significa que se esta haciendo referencia a ese elemento -->
+<mat-menu #menuApp="matMenu">
+  <button mat-menu-item>
+    <mat-icon>person</mat-icon>
+    <span>Perfil</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item>
+    <mat-icon>lock</mat-icon>
+    <span>Bloquear Sesión</span>
+  </button>
+  <mat-divider></mat-divider>
+  <div class="close">
+    <button mat-menu-item>
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Cerrar Sesión</span>
+    </button>
+  </div>
+</mat-menu>

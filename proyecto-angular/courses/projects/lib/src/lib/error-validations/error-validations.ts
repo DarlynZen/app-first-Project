@@ -2,6 +2,7 @@ import { Component,input,Input, Signal } from '@angular/core';
 import { FieldState } from '@angular/forms/signals';
 
 @Component({
+  standalone: true,
   selector: 'cdev-lib-error-validations',
   imports: [],
   template: `
