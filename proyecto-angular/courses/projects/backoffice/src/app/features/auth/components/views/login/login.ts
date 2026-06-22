@@ -5,9 +5,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { IAuth } from '../../../interfaces/auth';
-import { form, FormField, required, requiredError, validate } from '@angular/forms/signals';
+//import { IAuth } from '../../../interfaces/auth';
+import { IAuth } from '../../../domain/auth.type';
+import { form, FormField, pattern, required, requiredError, validate } from '@angular/forms/signals';
 import { ErrorValidations } from 'lib';
+import { Auth } from '../../../domain';
 
 @Component({
   standalone: true,
@@ -27,7 +29,28 @@ import { ErrorValidations } from 'lib';
 })
 export class Login {
 
-  initialValues: IAuth = {
+  user : IAuth = {
+    email: '',
+    password: ''
+  }
+
+  //modelo
+  userModel = signal<IAuth>(this.user);
+
+  //form-signal usa modelo y aplica esquema de validaciones
+  userForm = form(this.userModel, schema => {
+    required(schema.email, { message: "El correo es requerido" });
+    pattern(schema.email, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, { message: "El correo electrónico no es válido" });
+    required(schema.password, { message: "La contraseña es requerida" });
+    pattern(schema.password, /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, { message: "La contraseña debe tener al menos 8 caracteres y contener letra y número" });
+  })
+
+  login(){
+    console.log(this.userForm().invalid());
+  }
+
+
+/*   initialValues: IAuth = {
     email: '',
     password: '',
   }
@@ -55,9 +78,9 @@ export class Login {
     });
   });
 
-  save(){
-    if(this.authForm().valid()){
+  save() {
+    if (this.authForm().valid()) {
       console.log(this.authModel());
     }
-  }
+  } */
 }
