@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -7,9 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 //import { IAuth } from '../../../interfaces/auth';
 import { IAuth } from '../../../domain/auth.type';
-import { form, FormField, pattern, required, requiredError, validate } from '@angular/forms/signals';
+import { email, form, FormField, pattern, required, requiredError, validate } from '@angular/forms/signals';
 import { ErrorValidations } from 'lib';
+import { AuthApplication } from '../../../application/auth';
 import { Auth } from '../../../domain';
+import { AuthAdapter } from '../../../adapters/auth.adapters';
 
 @Component({
   standalone: true,
@@ -26,6 +28,10 @@ import { Auth } from '../../../domain';
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
+  providers: [AuthApplication,
+              //Inyectamos el adaptador para que pueda ser usado por la clase AuthApplication 
+              { provide: "IAuthPort", useClass: AuthAdapter }
+            ]
 })
 export class Login {
 
@@ -45,8 +51,15 @@ export class Login {
     pattern(schema.password, /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, { message: "La contraseña debe tener al menos 8 caracteres y contener letra y número" });
   })
 
+  //Inyectamos la clase AuthApplication para poder usarla en el método login
+  //constructor(private authApplication: AuthApplication) {}
+  private authApplication: AuthApplication = inject(AuthApplication);
+
   login(){
-    console.log(this.userForm().invalid());
+    const {email, password} = this.userForm().value();
+    const auth: Auth = new Auth({email, password});
+    
+    this.authApplication.login(auth);
   }
 
 
