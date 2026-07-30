@@ -10,5 +10,6 @@ export class AuthApplication {
     constructor(@Inject("IAuthPort") private readonly port: IAuthPort){}
 
     login (auth: Auth){
-        this.port.signIn(auth);}
+        return this.port.signIn(auth);
+    }
 }
